@@ -3,6 +3,7 @@ void main() {
 
 // 1. Declare a variable named 'message' and assign the value "Hello, Dart!" to it.
   String message = "Hello, Dart!";
+  print(message);
 
 // 2. Write a Dart program that checks if a given number is even or odd.
 // 		Input: 2
