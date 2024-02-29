@@ -20,7 +20,7 @@ abstract class Engine implements Service {
 
   void displayDetails() {
     print(
-        "Fuel type: $fuelType\nHorsepower: $_horsePower\nEfficiency: $_efficiency");
+        "Fuel type: ${_fuelType.name}\nHorsepower: $_horsePower\nEfficiency: $_efficiency");
   }
 
   //Using getters and setter for encapsulations and security pusposes
@@ -182,7 +182,7 @@ class SuperCar extends CarEngine {
   //Using getters and setters for this class too.
   bool get hasTurbo => _hasTurbo;
   List<String> get specialFeatures => _specialFeatures;
-  int get topSpeed => topSpeed;
+  int get topSpeed => _topSpeed;
 
   set hasTurbo(bool updatedStatus) => _hasTurbo = updatedStatus;
   set specialFeatures(List<String> updatesFeatures) =>
@@ -227,17 +227,17 @@ void main() {
   CarEngine xuv500Petrol = CarEngine.xuv500(FuelType.petrol);
   CarEngine xuv700Petrol = CarEngine.xuv700(FuelType.petrol);
 
-  CarEngine xuv300Desiel = CarEngine.xuv300(FuelType.diesel);
-  CarEngine xuv500Desiel = CarEngine.xuv500(FuelType.diesel);
-  CarEngine xuv700Desiel = CarEngine.xuv700(FuelType.diesel);
+  CarEngine xuv300Diesel = CarEngine.xuv300(FuelType.diesel);
+  CarEngine xuv500Diesel = CarEngine.xuv500(FuelType.diesel);
+  CarEngine xuv700Diesel = CarEngine.xuv700(FuelType.diesel);
 
   TruckEngine truckEngine = new TruckEngine(FuelType.petrol, 150, 50.2, 100);
   truckEngine.start();
   truckEngine.stop();
   truckEngine.displayDetails();
 
-  var xuv500 = CarEngine.xuv500(FuelType
-      .petrol); //Declaring using var as we are going to change this object to car object.
+  var xuv500 = CarEngine.xuv500(
+      FuelType.petrol); // Here I am using var for flexible typing
   xuv500.displayDetails();
 
   xuv500 = xuv500.convertCarToSuperCar(
