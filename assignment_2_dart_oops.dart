@@ -87,7 +87,7 @@ class CarEngine extends Engine {
     print("$_model - Car Engine");
   }
 
-  //Using getter and setters for CarEngine too, to avoid any updates through updates.
+  //Using getter and setters for CarEngine too, to avoid any updates through objects.
   int get cylinders => _cylinders;
   int get cc => _cc;
   String get model => _model;
