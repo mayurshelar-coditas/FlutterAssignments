@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math';
 
 void main() {
@@ -7,9 +8,24 @@ void main() {
   print(numbersArray); //Output - [0, 1, 9, 16, 100]
 
   //Question 2.
-  print(twoSum([2, 7, 11, 15], 9)); //Output - [0, 1]
-  print(twoSum([3, 2, 4], 6)); //Output - [0, 2]
-  print(twoSum([3, 3], 6)); //Output - [0, 1]
+  twoSum([2, 7, 11, 15], 9); //Output - [0, 1]
+  twoSum([3, 2, 4], 6); //Output - [1, 2]
+  twoSum([3, 3], 6); //Output - [0, 1]
+
+  //Question 6.
+  print(isAnagram("anagram", "nagaram")); //Output - true
+  print(isAnagram("rat", "car")); //Output - false
+  print(isAnagram("Mayur", "ruyaM")); //Output - true.
+
+  //Question 7.
+  TreeNode head = TreeNode(1, TreeNode(2, TreeNode(3), TreeNode(4)),
+      TreeNode(5, TreeNode(6), TreeNode(7)));
+  inorderTraversal(head);
+
+  //Question 9.
+  print(reverseWordsInAString("the sky is blue")); //Output - "blue is sky the"
+  print(reverseWordsInAString("  hello world  ")); //Output - "world hello"
+  print(reverseWordsInAString("a good   example")); //Output -
 }
 
 // 1.
@@ -65,14 +81,25 @@ void squareAndSortArray(List<int> numbersArray) {
 //if nums[i] + nums[j] < target then I'll increment i; as the sum is falling short
 //if nums[i] + nums[j] > target then I'll increment j; as sum is exceding the target.
 
-List<int> twoSum(List<int> numbersArray, int target) {
+void twoSum(List<int> numbersArray, int target) {
   int firstPointer = 0, secondPointer = numbersArray.length - 1;
+
+  final Map<int, int> indicesAndElements = new HashMap();
+
+  for (int number = 0; number < numbersArray.length; number++) {
+    //   if (indicesAndElements.containsKey(numbersArray[number])) {
+    //     indicesAndElements[numbersArray[number]]?.add(number);
+    //   }
+    indicesAndElements.addAll({numbersArray[number]: number});
+  }
 
   numbersArray.sort();
   while (firstPointer != secondPointer) {
     int currentSum = numbersArray[firstPointer] + numbersArray[secondPointer];
     if (currentSum == target) {
-      return [firstPointer, secondPointer];
+      print("First Index: ${indicesAndElements[numbersArray[firstPointer]]}");
+      print("Second Index: ${indicesAndElements[numbersArray[secondPointer]]}");
+      return;
     } else if (currentSum > target) {
       if (numbersArray[firstPointer] >= numbersArray[secondPointer]) {
         firstPointer++;
@@ -87,8 +114,6 @@ List<int> twoSum(List<int> numbersArray, int target) {
       }
     }
   }
-
-  return [];
 }
 
 // ========================================================================
@@ -107,6 +132,7 @@ List<int> twoSum(List<int> numbersArray, int target) {
 // Explanation: There is no common prefix among the input strings.
 
 // ========================================================================
+//Approach -
 
 // 4.
 // Given a string s, find the length of the longest
@@ -156,20 +182,63 @@ List<int> twoSum(List<int> numbersArray, int target) {
 // Input: s = "rat", t = "car"
 // Output: false
 // ========================================================================
+//Approach - 1. First I'll check length of both is same or not, bcoz if length itself is not same anagram cannot be formed.
+// 2. To individually count the frequency each letter and check if both the strings have same frequency count or not.
+
+bool isAnagram(String s, String t) {
+  if (s.length == t.length) {
+    //Converting to lowercase to handle case sentivity.
+    // List<String> arrayOfStringS = s.toLowerCase().split("");
+    // List<String> arrayOfStringT = t.toLowerCase().split("");
+
+    // arrayOfStringS.sort();
+    // arrayOfStringT.sort();
+
+    // return arrayOfStringS.join("") == arrayOfStringT.join();
+
+    s = s.toLowerCase();
+    t = t.toLowerCase();
+
+    List<int> letterFrequencyForS = List.filled(26, 0);
+    List<int> letterFrequencyForT = List.filled(26, 0);
+
+    for (int character = 0; character < s.length; character++) {
+      letterFrequencyForT[t.codeUnitAt(character) - 'a'.codeUnitAt(0)]++;
+      letterFrequencyForS[s.codeUnitAt(character) - 'a'.codeUnitAt(0)]++;
+    }
+
+    for (int index = 0; index < 26; index++) {
+      if (letterFrequencyForT[index] != letterFrequencyForS[index]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+  return false;
+}
 
 // 7.
 // Implement Inorder, preorder and postorder traversal of tree.
 // Use the below class to construct your tree data structure.
-// /**
-// * Definition for a binary tree node.
-// * class TreeNode {
-// *   int val;
-// *   TreeNode? left;
-// *   TreeNode? right;
-// *   TreeNode([this.val = 0, this.left, this.right]);
-// * }
-// */
+// Definition for a binary tree node.
+class TreeNode {
+  int val;
+  TreeNode? left;
+  TreeNode? right;
+  TreeNode([this.val = 0, this.left, this.right]);
+}
+
 // ========================================================================
+void inorderTraversal(TreeNode? node) {
+  if (node == null) {
+    return;
+  }
+
+  inorderTraversal(node.left);
+  print(node.val);
+  inorderTraversal(node.right);
+}
 
 // 8.
 // Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
@@ -224,6 +293,21 @@ List<int> twoSum(List<int> numbersArray, int target) {
 // Output: "example good a"
 // Explanation: You need to reduce multiple spaces between two words to a single space in the reversed string.
 // ========================================================================
+//Approach - 1. Convert the String of words into array of words. Then reverse that array and convert it to string of words again.
+
+String reverseWordsInAString(String words) {
+  List<String> listOfWords = words.trim().split(" ");
+
+  for (int word = 0; word < listOfWords.length / 2; word++) {
+    String word1 = listOfWords[word];
+    listOfWords[word] = listOfWords[listOfWords.length - word - 1];
+    listOfWords[listOfWords.length - word - 1] = word1;
+  }
+
+  return listOfWords
+      .join(" ")
+      .replaceAll(RegExp(r'\s+'), ' '); //Handling extra spaces in the string.
+}
 
 // 10.
 // Given a string s, remove duplicate letters so that every letter appears once and only once. You must make sure your result is
@@ -239,3 +323,31 @@ List<int> twoSum(List<int> numbersArray, int target) {
 // Output: "acdb"
 
 // ========================================================================
+
+String removeDuplicateLetters(String s) {
+  List<int> lastIndex = List.filled(26, 0);
+  for (int i = 0; i < s.length; i++) {
+    lastIndex[s.codeUnitAt(i) - 'a'.codeUnitAt(0)] =
+        i; // track the last index of character presence
+  }
+
+  List<bool> seen = List.filled(26, false); // keep track seen
+  List<int> stack = [];
+
+  for (int i = 0; i < s.length; i++) {
+    int curr = s.codeUnitAt(i) - 'a'.codeUnitAt(0);
+    if (seen[curr])
+      continue; // if seen continue as we need to pick one char only
+    while (stack.isNotEmpty && stack.last > curr && i < lastIndex[stack.last]) {
+      seen[stack.removeLast()] = false; // pop out and mark unseen
+    }
+    stack.add(curr); // add into stack
+    seen[curr] = true; // mark seen
+  }
+
+  StringBuffer sb = StringBuffer();
+  while (stack.isNotEmpty) {
+    sb.writeCharCode(stack.removeLast() + 'a'.codeUnitAt(0));
+  }
+  return sb.toString().split('').reversed.join('');
+}

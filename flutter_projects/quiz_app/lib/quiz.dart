@@ -21,16 +21,23 @@ class _QuizState extends State<Quiz> {
     selectedAnswers.add(selectedAnswer);
     if (selectedAnswers.length == questions.length) {
       setState(() {
-        selectedAnswers = [];
         activeScreen = 'results_screen';
       });
     }
   }
 
   void switchScreen() {
+    setState(
+      () {
+        activeScreen = 'questions_screen';
+      },
+    );
+  }
+
+  void restartQuiz() {
     setState(() {
-      //activeScreen = QuestionsScreen();
-      activeScreen = 'questions_screen';
+      selectedAnswers = [];
+      activeScreen = "start_screen";
     });
   }
 
@@ -45,16 +52,18 @@ class _QuizState extends State<Quiz> {
   Widget build(context) {
     return MaterialApp(
       home: Scaffold(
-          body: Container(
-        decoration: const BoxDecoration(
-            gradient:
-                LinearGradient(colors: [Colors.deepPurple, Colors.deepPurple])),
-        child: activeScreen == 'start_screen'
-            ? StartScreen(switchScreen)
-            : activeScreen == 'questions_screen'
-                ? QuestionsScreen(onSelectAnswer: chooseAnswer)
-                : ResultScreen(selectedAnswers: selectedAnswers),
-      )),
+        body: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.deepPurple, Colors.deepPurple])),
+          child: activeScreen == 'start_screen'
+              ? StartScreen(switchScreen)
+              : activeScreen == 'questions_screen'
+                  ? QuestionsScreen(onSelectAnswer: chooseAnswer)
+                  : ResultScreen(
+                      chosenAnswers: selectedAnswers, onRestart: restartQuiz),
+        ),
+      ),
     );
   }
 }
