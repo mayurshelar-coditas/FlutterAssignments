@@ -16,8 +16,6 @@ class ImmutablePoint {
   const ImmutablePoint(this.x, this.y);
 }
 
-
-
 abstract class Vehicle {
   void moveForward(int meters);
 }
@@ -41,20 +39,15 @@ mixin CanWalk on Mammal {
   }
 }
 
-class Mammal {
+class Mammal {}
 
-}
-class Amphibians {
+class Human extends Mammal with CanWalk {}
 
-}
-
-
-class Human extends Mammal with CanWalk{
-  
-}
 
 void main() {
   ImmutablePoint ip = ImmutablePoint(3, 4);
   print(ip.x);
   print(ip.y);
+  Human h = Human();
+  h.canWalk();
 }
