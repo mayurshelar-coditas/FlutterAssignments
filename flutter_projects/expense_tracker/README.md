@@ -1,4 +1,4 @@
-# quiz_app
+# expense_tracker
 
 A new Flutter project.
 
